@@ -47,7 +47,7 @@ namespace ElectronicsShop_service.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "4a3b4285-1b6e-4d01-8a7f-889e880dde25",
+                            ConcurrencyStamp = "215976b6-cc63-4b8d-b742-fdde2fb63a5c",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
                             userId = 1
@@ -55,7 +55,7 @@ namespace ElectronicsShop_service.Migrations
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "af548600-89cd-4072-97be-f115855c7770",
+                            ConcurrencyStamp = "3d25e8b3-fa29-40e4-aaad-b7d65a942358",
                             Name = "User",
                             NormalizedName = "USER",
                             userId = 2

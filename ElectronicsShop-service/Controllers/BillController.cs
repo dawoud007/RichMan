@@ -25,25 +25,25 @@ public class BillController : MyBaseController<Bill, BillDto>
 {
 	private readonly IBillRepository _billRepository;
 	private readonly IClothRepository _clothRepository;
-    public BillController(IBillRepository billRepository,IClothRepository clothRepository,  IBillUnitOfWork unitOfWork, IMapper mapper, IValidator<Bill> validator) : base(unitOfWork, mapper, validator)
-    {
-		_billRepository= billRepository;
-		_clothRepository= clothRepository;
-    }
+	public BillController(IBillRepository billRepository, IClothRepository clothRepository, IBillUnitOfWork unitOfWork, IMapper mapper, IValidator<Bill> validator) : base(unitOfWork, mapper, validator)
+	{
+		_billRepository = billRepository;
+		_clothRepository = clothRepository;
+	}
 
 
 	public override async Task<IActionResult> Get()
 	{
-	
+
 		var results = await _billRepository.GetAllAsync();
-	
+
 
 		foreach (var bill in results)
 		{
-		var thing = (await _clothRepository.Get(c =>c.BillId==bill.Id)).ToList();
-			bill.Suits=thing;
-			
-			
+			var thing = (await _clothRepository.Get(c => c.BillId == bill.Id)).ToList();
+			bill.Suits = thing;
+
+
 
 		}
 		return Ok(results);
@@ -51,19 +51,12 @@ public class BillController : MyBaseController<Bill, BillDto>
 
 
 
-	public override async Task<IActionResult> Get(Guid id)
+	[HttpGet("{GetBlWithBuyerName}")]
+	public  async Task<IActionResult> GetBillWithBuyerName([FromQuery] string searchedBuyertName)
 	{
-		var result = await _billRepository.GetByIdAsync(id);	
-		var billSuits=(await _clothRepository.Get(c=>c.BillId==id)).ToList();
-		result.Suits = billSuits;
-		return Ok(result);
+        var result= (await _billRepository.Get(b=>b.BuyerName==searchedBuyertName,null,"")).FirstOrDefault();
+        return Ok(result);
 	}
-
-
-
-
-
-
 
 
 	[HttpPost]
@@ -74,6 +67,8 @@ public class BillController : MyBaseController<Bill, BillDto>
 			return BadRequest(ModelState);
 		}
 		var list=new List<Cloth>();
+		int WarningToNumberOfPieces=0;
+
 		
 		foreach(var suit in billDto.Suits!)
 		{
@@ -95,12 +90,16 @@ public class BillController : MyBaseController<Bill, BillDto>
 			if (billDto.Suits != null && billDto.Suits.Any())
 			{
 				foreach (var suitDto in billDto.Suits)
-				{  var suits = await FindSuitWithFeatures(suitDto);
+				{  var suits = await FindSuitWithFeatures(suitDto!);
 					if (suitDto != null)
 					{
 						if (suitDto.NumOfPieces <= suits.NumOfPieces)
 						{
 							suits.NumOfPieces -=suitDto.NumOfPieces;
+							if (suits.NumOfPieces <= 10)
+							{
+								WarningToNumberOfPieces=suitDto.NumOfPieces;
+							}
 							
 						}
 						else
@@ -116,6 +115,13 @@ public class BillController : MyBaseController<Bill, BillDto>
 			}
 
 			await _billRepository.Save();
+
+			if (WarningToNumberOfPieces > 0)
+			{
+				var addBillWithAmountWarning=bill.Adapt<BillDto>();
+
+				return Ok(addBillWithAmountWarning);
+			}
 			return Ok(bill);
 		}
 		catch (Exception ex)

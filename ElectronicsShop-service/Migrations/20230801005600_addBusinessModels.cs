@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ElectronicsShop_service.Migrations
 {
-    public partial class addModels : Migration
+    public partial class addBusinessModels : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -130,12 +130,12 @@ namespace ElectronicsShop_service.Migrations
             migrationBuilder.InsertData(
                 table: "ApplicationRole",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "userId" },
-                values: new object[] { "1", "4a3b4285-1b6e-4d01-8a7f-889e880dde25", "Admin", "ADMIN", 1 });
+                values: new object[] { "1", "215976b6-cc63-4b8d-b742-fdde2fb63a5c", "Admin", "ADMIN", 1 });
 
             migrationBuilder.InsertData(
                 table: "ApplicationRole",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "userId" },
-                values: new object[] { "2", "af548600-89cd-4072-97be-f115855c7770", "User", "USER", 2 });
+                values: new object[] { "2", "3d25e8b3-fa29-40e4-aaad-b7d65a942358", "User", "USER", 2 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clothes_BillId",
