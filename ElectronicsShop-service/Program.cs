@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using static ElectronicsShop_service.Controllers.AuthController;
 using ElectronicsShop_service.Options;
 using Authentication.Infrastructure.Models;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,13 +29,15 @@ builder.Services.AddEndpointsApiExplorer();
 //configure swagger gen options
 
 builder.Services.ConfigureOptions<SwaggerGenOptionsSetup>();
-
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ApplicationDbContext>(Options =>
+string connectionString = builder.Configuration.GetConnectionString("Default");
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+/*builder.Services.AddDbContext<ApplicationDbContext>(Options =>
 {
 	Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+});*/
 builder.Services.ConfigureOptions<IdentityOptionsSetup>();
 
 
@@ -112,6 +115,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll", builder =>
     {
         builder.AllowAnyOrigin()
+        .WithOrigins("https://7d14-102-189-32-23.ngrok-free.app")
         .AllowAnyMethod()
         .AllowAnyHeader();
      
@@ -130,11 +134,11 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate();
 }
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+/*if (app.Environment.IsDevelopment())
+{*/
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+/*}*/
 /*app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());*/
 
 app.UseRouting();

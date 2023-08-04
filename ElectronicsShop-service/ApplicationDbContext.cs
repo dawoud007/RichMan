@@ -27,11 +27,12 @@ public class ApplicationDbContext : DbContext
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        /*if (!optionsBuilder.IsConfigured)
+        if (!optionsBuilder.IsConfigured)
         {
             string connectionString = configuration.GetConnectionString("Default");
-            optionsBuilder.UseSqlServer(connectionString);
-        }*/
+            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        }
+       /* "DefaultConnection": "Server=DESKTOP-06NBEEH\\SQLEXPRESS;Database=pushing;Trusted_Connection=True;TrustServerCertificate=True;",*/
         base.OnConfiguring(optionsBuilder);
     }
 /*    protected override void OnModelCreating(ModelBuilder modelBuilder)

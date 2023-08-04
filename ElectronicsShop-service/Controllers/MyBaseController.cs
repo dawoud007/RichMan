@@ -41,19 +41,20 @@ namespace ElectronicsShop_service.Controllers
 			return Ok(_mapper.Map<TDto>(entity));
 		}
 
-		[HttpGet]
-		public virtual async Task<IActionResult> Get()
-		{
-			return Ok((await _unitOfWork.ReadAllAsync()).Select((product) => _mapper.Map<TDto>(product)));
-		}
+        [HttpGet]
+        public virtual async Task<IActionResult> Get()
+        {
+            var x = (await _unitOfWork.ReadAllAsync()).Select((product) => _mapper.Map<TDto>(product)).FirstOrDefault();
+            return Ok(x);
+        }
 
-	/*	[HttpGet("{id}")]
-		public virtual async Task<IActionResult> Get(Guid id)
-		{
-			TEntity source = await _unitOfWork.ReadByIdAsync(id);
-			TDto value = _mapper.Map<TDto>(source);
-			return Ok(value);
-		}*/
+        /*	[HttpGet("{id}")]
+            public virtual async Task<IActionResult> Get(Guid id)
+            {
+                TEntity source = await _unitOfWork.ReadByIdAsync(id);
+                TDto value = _mapper.Map<TDto>(source);
+                return Ok(value);
+            }*/
 
 
 
